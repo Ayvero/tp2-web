@@ -12,25 +12,20 @@ class clothesModel {
 
 //muestra toda la lista de productos
     public function getAll() {
-
-        
         $query = $this->db->prepare("SELECT * FROM clothes");//selecciono toda la lista de la tabla clothes
         $query->execute();                  //envio la consulta        
-        
-
         $clothes = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
         
         return $clothes;  //reenvia el arreglo al controlador
     }
 
 
-
-    public function getFilter($table = null,  $category= null) {
+//filtra los productos por una colunma determinada y un parametro (sin comodin)
+    public function getFilter($column , $search) {
         
-
-        if( $table  && $category){
-         $query = $this->db->prepare("SELECT * FROM clothes JOIN brand ON clothes.id_clothes = brand.id_brand WHERE id_brand = $category;");//selecciono toda la lista de la tabla clothes
-        $query->execute();                  //envio la consulta        
+        if( $column  && $search){
+         $query = $this->db->prepare("SELECT * FROM clothes JOIN brand ON clothes.id_clothes = brand.id_brand WHERE $column LIKE ? ;");//selecciono toda la lista de la tabla clothes
+        $query->execute([$search]);                  //envio la consulta        
         $clothes = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
         
         return $clothes;  //reenvia el arreglo al controlador
@@ -38,18 +33,16 @@ class clothesModel {
 
     }
 
-
+  //ordena segun una columna en forma asc o desc
     public function getOrder($sort,  $order) {
-
-        
          $query = $this->db->prepare("SELECT * FROM clothes ORDER BY $sort  $order ;");//selecciono toda la lista de la tabla clothes
         $query->execute();                  //envio la consulta        
         $clothes = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
         
         return $clothes;  //reenvia el arreglo al controlador
     
-
     }
+
 
     public function getLimit($select,$starAt,$endAt) {
 
@@ -107,12 +100,13 @@ class clothesModel {
 }
 
 public function getColumns() {
-
+/** 
         
-    $query = $this->db->prepare("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = business and TABLE_NAME = clothes order by ORDINAL_POSITION");//selecciono toda la lista de la tabla clothes
+    $query = $this->db->prepare("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'business' and TABLE_NAME = 'clothes' order by ORDINAL_POSITION");//selecciono toda la lista de la tabla clothes
    $query->execute();                  //envio la consulta        
-   $columns = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
-   
+   $columns = $query->fetchAll(PDO::FETCH_ASSOC); // devuelve un arreglo de objetos
+   */
+  $columns= array ( "*", "id", "id_clothes", "description","size","colour","price","image","offers","brand","id_brand");
    return $columns;  //reenvia el arreglo al controlador
 
 

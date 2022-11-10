@@ -22,75 +22,91 @@ class clothesApiController {
 
 
         /** ==================================================================
-         **     //lista los productos por categoria segun id de la categoria:
+         **     //Filtra los productos de ambas tablas por columna y atributo (sin comodines):
          ** ===================================================================== */
            
 
        public function getClothes($params = null) {
 
-        if (!empty ($_GET ['table'])  && !empty ($_GET ['category'] )){
-            $table = $_GET ['table'];
-            $category= $_GET['category'];
+        if (!empty ($_GET ['column'])  && !empty ($_GET ['search'] )){
+            $column = $_GET ['column'];
+            $search= $_GET['search'];
+            
 
+          $columns=$this->model->getColumns(); //traigo el array de los nombres de las columnas de las tablas
+          if (in_array($column, $columns)) {
 
-                $clothes =$this->model->getFilter($table,$category);
-                if( $clothes){
-                    $this->view->response ($clothes, 200);
-                }else{
-                    $this->view->response ("no hay datos para mostrar", 404);
-                }
-                
+            $clothes =$this->model->getFilter($column,$search);
+           // $busq= array_search($search,$clothes->$column);
+           if($clothes==true){
+            $this->view->response ($clothes, 200);
 
+           }else{
+            $this->view->response ("Atributo no encontrado.", 404);
 
-             }
+           }
+               
+          }else{
+            $this->view->response ("Nombre invalido de columna. ", 400);
+            }
+          }   
 
- 
         /** ==================================================================
          **  ordena los productos  de una columna por orden desc o asc :
          ** ===================================================================== */
     
-             
-            
-
             if (!empty ($_GET ['sort'])  && !empty ($_GET ['order'] )){
                 $sort = $_GET ['sort'];
                 $order= $_GET['order'];
-                if(($order== "asc") || ($order == "desc")){
-                    $clothes =$this->model->getOrder($sort,  $order);
-                    $this->view->response ($clothes, 200);
-        
-                }else if (($order != "asc") || ($order != "desc")){
 
-                    $this->view->response ("para ordenar coloque asc o desc ", 404);
-                }
-               
-               
-            }
+             $columns=$this->model->getColumns(); //traigo el array de los nombres de las columnas de las tablas
             
+              if((in_array($sort, $columns)) && (($order == "asc") || ($order == "desc"))){
+
+                $clothes =$this->model->getOrder($sort,  $order);
+                    $this->view->response ($clothes, 200);
+              }else{
+                $this->view->response ("para ordenar coloque asc /desc o especifique un nombre de columna valido ", 400);
+                }
+              }
+
+
+            
+        
             /** ==================================================================
-             **  Muestra la lista por un numero dado de filas : (paginacion)
+             **  Muestra la lista por un numero dado de filas : (paginacion con filtro por una colunma determinada)
              ** ===================================================================== */
     
             if (!empty ($_GET ['select'])  && !empty ($_GET ['starAt'] ) && !empty ($_GET ['endAt'])){
                 $select = $_GET ['select'];
                 $starAt = $_GET ['starAt'];
                 $endAt= $_GET['endAt'];
-                
+
+                $columns=$this->model->getColumns(); //traigo el array de los nombres de las columnas de las tablas
+            
+                if(in_array($select, $columns)) {
+  
                     $clothes =$this->model->getLimit($select,$starAt,$endAt);
-                    if( $clothes  ){
+                    if($clothes==true){
                         $this->view->response ($clothes, 200);
-    
+
                     }else{
-                        $this->view->response ("no hay datos para mostrar", 404);
-    
+                        $this->view->response ("No hay elementos para mostrar ", 404);
+
                     }
+                    
+                }else{
+                  $this->view->response ("El nombre de la columna no es valido", 400);
+                  }
+                }
+     
                     
 
                    
-                }
+                
             
                /** ==================================================================
-                **  Filtra los datos de una columna determinada y segun un dato especifico
+                **  Filtra los datos de una columna determinada y segun un dato especifico 
                 ** ===================================================================== */
 
                 if (!empty ($_GET ['linkTo'])  && !empty ($_GET ['equalTo'] ) ){
@@ -124,7 +140,7 @@ class clothesApiController {
 
           
         
-        else if (empty ($_GET ['linkTo'])  &&  empty ($_GET ['equalTo']) && empty ($_GET ['select'])  &&  empty ($_GET ['starAt']) && empty ($_GET ['endAt']) && empty ($_GET ['table'])  &&  empty ($_GET ['category']) && empty ($_GET ['sort'])  &&  empty ($_GET ['order'])){
+        else if (empty ($_GET ['column'])  &&  empty ($_GET ['search']) &&  empty ($_GET ['linkTo'])  &&  empty ($_GET ['equalTo']) && empty ($_GET ['select'])  &&  empty ($_GET ['starAt']) && empty ($_GET ['endAt']) && empty ($_GET ['table'])  &&  empty ($_GET ['category']) && empty ($_GET ['sort'])  &&  empty ($_GET ['order'])){
 
                 $clothes =$this->model->getAll();
                 if( $clothes  ){
@@ -198,6 +214,7 @@ class clothesApiController {
 
      public function getColumns(){
         $columns=$this->model->getColumns();
+        var_dump($columns);
 
      }
 
