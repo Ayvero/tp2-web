@@ -13,7 +13,7 @@ class clothesModel {
 //muestra toda la lista de productos
     public function getAll() {
         $query = $this->db->prepare("SELECT * FROM clothes");//selecciono toda la lista de la tabla clothes
-        $query->execute();                  //envio la consulta        
+        $query->execute();              //envio la consulta  
         $clothes = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
         
         return $clothes;  //reenvia el arreglo al controlador

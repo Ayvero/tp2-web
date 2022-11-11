@@ -37,7 +37,7 @@ class clothesApiController {
           if (in_array($column, $columns)) {
 
             $clothes =$this->model->getFilter($column,$search);
-           // $busq= array_search($search,$clothes->$column);
+           
            if($clothes==true){
             $this->view->response ($clothes, 200);
 
@@ -46,10 +46,13 @@ class clothesApiController {
 
            }
                
-          }else{
+          }else  {
             $this->view->response ("Nombre invalido de columna. ", 400);
             }
+           
+          
           }   
+        
 
         /** ==================================================================
          **  ordena los productos  de una columna por orden desc o asc :
@@ -142,6 +145,7 @@ class clothesApiController {
         
         else if (empty ($_GET ['column'])  &&  empty ($_GET ['search']) &&  empty ($_GET ['linkTo'])  &&  empty ($_GET ['equalTo']) && empty ($_GET ['select'])  &&  empty ($_GET ['starAt']) && empty ($_GET ['endAt']) && empty ($_GET ['table'])  &&  empty ($_GET ['category']) && empty ($_GET ['sort'])  &&  empty ($_GET ['order'])){
 
+                 
                 $clothes =$this->model->getAll();
                 if( $clothes  ){
                     $this->view->response ($clothes, 200);
@@ -150,6 +154,10 @@ class clothesApiController {
                     $this->view->response ("no hay datos para mostrar",404);
 
                 }
+                 
+
+                
+
                 
 
             }
