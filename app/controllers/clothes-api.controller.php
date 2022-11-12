@@ -109,32 +109,33 @@ class clothesApiController {
                 
             
                /** ==================================================================
-                **  Filtra los datos de una columna determinada y segun un dato especifico 
+                **  Filtra los datos por una columna determinada  
                 ** ===================================================================== */
 
-                if (!empty ($_GET ['linkTo'])  && !empty ($_GET ['equalTo'] ) ){
-                    $linkTo = $_GET ['linkTo'];
-                    $equalTo = $_GET ['equalTo'];
+                if (!empty ($_GET ['col1']) && !empty ($_GET ['col2'])&& !empty ($_GET ['col3'])){
+                    $col1 = $_GET ['col1'];
+                    $col2 = $_GET ['col2'];
+                    $col3 = $_GET ['col3'];
+                    
+                    $columns=$this->model->getColumns(); //traigo el array de los nombres de las columnas de las tablas
+            
+                if((in_array($col1,$columns)) && (in_array($col1,$columns)) && (in_array($col1,$columns))){
+  
+                    $clothes =$this->model->getOneColumn($col1,$col2,$col3);
+                    if($clothes==true){
+                        $this->view->response ($clothes, 200);
 
-
-                    if (($linkTo=="id" )|| ($linkTo=="id_clothes" )|| ($linkTo=="description" )||($linkTo=="size" )||($linkTo=="colour" )||($linkTo=="price" )||($linkTo=="image" )||($linkTo=="oferta" )){
-                        $clothes =$this->model->getFilterTo($linkTo,$equalTo);
-                        if( $clothes  ){
-                            $this->view->response ($clothes, 200);
-        
-                        }else{
-                            $this->view->response ("no hay datos para mostrar", 404);
-        
-                        }
-                       
                     }else{
-                        $this->view->response ("No existe esa columna", 400);
-
-                    }
+                        $this->view->response ("No hay elementos para mostrar ", 404);
 
                     }
                     
-                    
+                }else{
+                  $this->view->response ("El nombre de la columna no es valido", 400);
+                  }
+                   
+                }
+      
                        
                 /** ==================================================================
                  **  Muestra la tabla entera sin filtros ni limites

@@ -56,12 +56,12 @@ class clothesModel {
 
    }
 
-   public function getFilterTo($linkTo,$equalTo) {
+   public function getOneColumn($col1,$col2,$col3) {
 
         
-    $query = $this->db->prepare("SELECT * FROM clothes WHERE $linkTo = ? ;");//selecciono toda la lista de la tabla clothes
-
-   $query->execute([$equalTo]);                  //envio la consulta        
+    $query = $this->db->prepare("SELECT $col1,$col2,$col3 FROM clothes JOIN brand ON clothes.id_clothes = brand.id_brand ;");//selecciono toda la lista de la tabla clothes
+    
+   $query->execute();                  //envio la consulta        
    $clothes = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
    
    return $clothes;  //reenvia el arreglo al controlador
