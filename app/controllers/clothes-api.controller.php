@@ -29,15 +29,15 @@ class clothesApiController {
        public function getClothes($params = null) {
 
         if (!empty ($_GET ['column'])  && !empty ($_GET ['search'] )){
-            $column = $_GET ['column'];
-            $search= $_GET['search'];
+            $column = $_GET ['column'];//columna en la cual buscar
+            $search= $_GET['search'];//atributo especifico a buscar
             
-
+         //si el array con todas las columnas de ambas tablas para comparar los nombres 
           $columns=$this->model->getColumns(); //traigo el array de los nombres de las columnas de las tablas
-          if (in_array($column, $columns)) {
-
+          if (in_array($column, $columns)) {//se compara si el nombre de la columna se halla en la lista
+             //si es asi envia al model los datos
             $clothes =$this->model->getFilter($column,$search);
-           
+           //si regresa un arreglo valido lo imprime
            if($clothes==true){
             $this->view->response ($clothes, 200);
 
@@ -109,7 +109,7 @@ class clothesApiController {
                 
             
                /** ==================================================================
-                **  Filtra los datos por una columna determinada  
+                **  Filtra los datos por tres columnas (busquedas especificas)  
                 ** ===================================================================== */
 
                 if (!empty ($_GET ['col1']) && !empty ($_GET ['col2'])&& !empty ($_GET ['col3'])){
@@ -232,4 +232,3 @@ class clothesApiController {
     
     
 
-//select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = 'business' and TABLE_NAME = 'clothes' order by ORDINAL_POSITION;

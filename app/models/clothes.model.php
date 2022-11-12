@@ -114,8 +114,3 @@ public function getColumns() {
    }
 
 
-//SELECT * FROM `clothes` ORDER BY `price` DESC;
-//in array
-//php.net
-
-//SELECT * FROM clothes JOIN brand ON clothes.id_clothes = brand.id_brand WHERE id_clothes= 3;
