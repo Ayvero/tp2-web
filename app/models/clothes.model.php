@@ -42,8 +42,6 @@ class clothesModel {
         return $clothes;  //reenvia el arreglo al controlador
     
     }
-
-
     public function getLimit($select,$starAt,$endAt) {
 
         
