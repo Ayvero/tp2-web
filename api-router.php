@@ -10,6 +10,7 @@ $router->addRoute('clothes', 'GET', 'clothesApiController', 'getClothes');
 $router->addRoute('clothes/:ID', 'GET', 'clothesApiController', 'getCloth');
 $router->addRoute('clothes/:ID', 'DELETE', 'clothesApiController', 'deleteClothes');
 $router->addRoute('clothes', 'POST', 'clothesApiController', 'insertClothes'); 
+$router->addRoute('clothes', 'PUT', 'clothesApiController', 'upDateClothes'); 
 
 
 

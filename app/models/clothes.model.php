@@ -110,6 +110,17 @@ public function getColumns() {
 
 }
 
+function upDate($id){
+    $sentencia= $this-> db->prepare("SELECT *FROM clothes WHERE id =?;");
+    $sentencia->execute([$id]);
+    $clothes= $sentencia->fetch(PDO:: FETCH_OBJ);
+    return $clothes;
+    }
+function info_clothes($id_clothes, $description, $size,$colour,$price,$image,$offers,$id) {
+    $query=$this->db->prepare('UPDATE clothes SET  id_clothes = ?, description= ?, size= ?, colour = ?,price = ?,image=?, offers= ? WHERE id= ?;');
+    $query->execute ([$id_clothes, $description, $size,$colour,$price,$image,$offers,$id]);      
+    }
+
 
    }
 

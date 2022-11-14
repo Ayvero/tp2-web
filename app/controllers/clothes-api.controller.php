@@ -58,14 +58,18 @@ class clothesApiController {
          **  ordena los productos  de una columna por orden desc o asc :
          ** ===================================================================== */
     
+            //trae las variables  en el get
             if (!empty ($_GET ['sort'])  && !empty ($_GET ['order'] )){
                 $sort = $_GET ['sort'];
                 $order= $_GET['order'];
 
+             //llama la funcion con el arreglo de las columnas
              $columns=$this->model->getColumns(); //traigo el array de los nombres de las columnas de las tablas
-            
+             
+             //compara si esa columna es parte del arreglo
               if((in_array($sort, $columns)) && (($order == "asc") || ($order == "desc"))){
-
+             
+             //llama a la funcion del model de ordenar   
                 $clothes =$this->model->getOrder($sort,  $order);
                     $this->view->response ($clothes, 200);
               }else{
@@ -77,29 +81,42 @@ class clothesApiController {
             
         
             /** ==================================================================
-             **  Muestra la lista por un numero dado de filas : (paginacion con filtro por una colunma determinada)
+             **   Paginacion con filtro por una colunma determinada
              ** ===================================================================== */
     
-            if (!empty ($_GET ['select'])  && !empty ($_GET ['starAt'] ) && !empty ($_GET ['endAt'])){
+             //si las variables select (selecciona una columna), starAt (indica inicio de las filas a traer) y endAt(fin de las filas)
+            // estan seteadas
+            if (isset ($_GET ['select'])  && isset($_GET ['starAt'] ) && isset ($_GET ['endAt'])){
                 $select = $_GET ['select'];
                 $starAt = $_GET ['starAt'];
                 $endAt= $_GET['endAt'];
 
+                //se llama al arreglo de columnas para comprobar si existe esa columna
+
                 $columns=$this->model->getColumns(); //traigo el array de los nombres de las columnas de las tablas
-            
-                if(in_array($select, $columns)) {
-  
+                // se compara la columna con el arreglo
+                //se controla que los datos sean numericos
+
+                if((is_numeric($starAt)) && (is_numeric($endAt)) && (in_array($select, $columns)) && ( $starAt >= 0)) {
+
+
+               // if((in_array($select, $columns)) && ( $starAt >= 0)) {
+
+                    //se llama a la funcion del model que realiza la paginacion
                     $clothes =$this->model->getLimit($select,$starAt,$endAt);
+
+                    // si regresa un arreglo cargado
                     if($clothes==true){
                         $this->view->response ($clothes, 200);
-
+                     
+                    //si no trae nada:
                     }else{
                         $this->view->response ("No hay elementos para mostrar ", 404);
 
                     }
-                    
+                    // si la columna no coincide:
                 }else{
-                  $this->view->response ("El nombre de la columna no es valido", 400);
+                  $this->view->response ("Los datos cargados son erroneos", 400);
                   }
                 }
      
@@ -228,7 +245,25 @@ class clothesApiController {
      }
 
 
+
+     public function updateClothes($params = null) {
+        $id = $params[':ID'];
+        $cloth = $this->model->get($id);
+        if ( !empty ($cloth)) {
+            $body = $this->getData();
+            $clothes = $this->model->info_clothes($body->id_clothes, $body->description, $body->size, $body->colour, $body->price, $body->image, $body->offers, $body->id);
+            $this->view->response("Producto con id =$id actualizado con éxito", 200);
+        }
+        else {
+            $this->view->response("producto con id =$id no encontrado", 404);
+        }
+           
+    }
+ 
+
 }
+
+
     
     
 
