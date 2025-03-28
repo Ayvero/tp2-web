@@ -1,5 +1,5 @@
 # API REST para el recurso de clothes
-Una API REST sencilla para manejar un CRUD de clothes
+
 
 
 ## Pueba con postman
